@@ -31,3 +31,23 @@ def signup(request):
             return redirect('signup')
     else:
         return render(request,'signup.html')
+def signin(request):
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            return redirect('/')
+        else:
+            messages.info(request, 'Credentials Invalid')
+            return redirect('signin')
+
+    else:
+        return render(request, 'signin.html')
+def logout(request):
+    auth.logout(request)
+    return redirect('signin')
